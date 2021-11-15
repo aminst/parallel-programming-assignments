@@ -67,16 +67,19 @@ int main() {
     int result_s = min_idx_serial(a, n);
     gettimeofday(&end, NULL);
 
-    timeval serial_time;
-    
+    timeval serial_time = end - start;
 
     cout << "Serial Min. Index: " << result_s << endl;
-    print_time(start, end);
+    print_time(start, end, false);
     
     gettimeofday(&start, NULL);
     int result_p = min_idx_parallel(a, n);
     gettimeofday(&end, NULL);
 
+    timeval parallel_time = end - start;
+
     cout << "Parallel Min. Index: " << result_p << endl;
-    print_time(start, end);
+    print_time(start, end, true);
+
+    print_speedup(serial_time, parallel_time);
 }

@@ -8,17 +8,18 @@
 using namespace std;
 
 float average_serial(float* a, int n){
-    float sum = 0;
+    float sum[4] = {0,0,0,0};
+    
     for (int i = 0; i < n; ++i)
-        sum += a[i];
-    return sum / n;
+        sum[i%4] += a[i];
+    return (sum[0] + sum[1] + sum[2] + sum[3]) / n;
 }
 
 float std_serial(float* a, int n, float avg){
-    float sum = 0;
+    float sum[4] = {0,0,0,0};
     for (int i = 0; i < n; ++i)
-        sum += (a[i] - avg) * (a[i] - avg);
-    return sqrt(sum / n);
+        sum[i%4] += (a[i] - avg) * (a[i] - avg);
+    return sqrt((sum[0] + sum[1] + sum[2] + sum[3]) / n);
 }
 
 float std_parallel(float* a, int n, float avg){
@@ -62,9 +63,12 @@ int main(){
     gettimeofday(&end, NULL);
     long seconds = (end.tv_sec - start.tv_sec);
     long micros = ((seconds * 1000000) + end.tv_usec) - (start.tv_usec);
+
+    timeval serial_time = end - start;
+
     printf("Serial Average: %f\n", avg);
     printf("Serial Std: %f\n", std);
-    printf("Serial Execution time is %ld s and %ld micros\n\n", seconds, micros);
+    print_time(start, end, false);
 
     gettimeofday(&start, NULL);
     avg = average_parallel(a, SIZE);
@@ -72,9 +76,14 @@ int main(){
     gettimeofday(&end, NULL);
     seconds = (end.tv_sec - start.tv_sec);
     micros = ((seconds * 1000000) + end.tv_usec) - (start.tv_usec);
+
+    timeval parallel_time = end - start;
+
     printf("Parallel Average: %f\n", avg);
     printf("Parallel Std: %f\n", std);
-    printf("Parallel Execution time is %ld s and %ld micros\n\n", seconds, micros);
+    print_time(start, end, true);
+
+    print_speedup(serial_time, parallel_time);
 
     return 0;
 }

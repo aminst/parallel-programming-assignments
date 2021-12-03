@@ -5,10 +5,13 @@
 
 const int SIZE = 1 << 22;
 
-void print_time(timeval start, timeval end) {
+void print_time(timeval start, timeval end, bool is_parallel) {
     long seconds = (end.tv_sec - start.tv_sec);
     long micros = ((seconds * 1000000) + end.tv_usec) - (start.tv_usec);
-    printf("Parallel Execution time is %ld s and %ld micros\n\n", seconds, micros);
+    if (is_parallel)
+        printf("Parallel Execution time is %ld s and %ld micros\n\n", seconds, micros);
+    else
+        printf("Serial Execution time is %ld s and %ld micros\n\n", seconds, micros);
 }
 
 float to_float(timeval tv) {

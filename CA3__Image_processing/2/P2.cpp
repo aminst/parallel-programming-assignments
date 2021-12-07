@@ -16,12 +16,11 @@ timeval serial(cv::Mat img1, cv::Mat img2)
     unsigned char* img2_data = (unsigned char*) img2.data;
     unsigned char* img_out_data = (unsigned char*) img_out.data;
 
-    for (int i = 0; i < img1.rows; i++) {
-        for (int j = 0; j < img1.cols; j++) {
-            int index = i * img1.cols + j;
-            img_out_data[index] = img2_data[index] + img1_data[index];
-        }
-    }    
+    for (int i = 0; i < img1.rows * img1.cols; i++) {
+        img_out_data[i] = img2_data[i] + img1_data[i];
+        if (img_out_data[i] < img2_data[i])
+            img_out_data[i] = -1;
+    }
 
     gettimeofday(&end, NULL);
     print_time(start, end, false);

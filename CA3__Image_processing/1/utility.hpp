@@ -4,6 +4,7 @@
 #include <sys/time.h>
 
 const int SIZE = 1 << 22;
+const int MICROS = int(1e6);
 
 void print_time(timeval start, timeval end, bool is_parallel) {
     long seconds = (end.tv_sec - start.tv_sec);
@@ -19,14 +20,17 @@ float to_float(timeval tv) {
 }
 
 void print_speedup(timeval serial_time, timeval parallel_time) {
+    printf("serial time is: %f\n", to_float(serial_time));
+    printf("parallel time is: %f\n", to_float(parallel_time));
     printf ("Speedup = %4.2f\n", to_float(serial_time) / to_float(parallel_time));
 }
 
-timeval operator-(timeval start, timeval end) {
-    int diff = (end.tv_sec - start.tv_sec) * int(1e6) + ((int)end.tv_usec - (int)start.tv_usec);
-    timeval result;
-    result.tv_sec = diff / int(1e6);
-    result.tv_usec = diff % int(1e6);
+timeval operator-(timeval end, timeval start) {
+    long start_usec = start.tv_sec * MICROS + start.tv_usec;
+    long end_usec = end.tv_sec * MICROS + end.tv_usec;
+    long diff_usec = end_usec - start_usec;
+    return timeval {diff_usec / MICROS, diff_usec % MICROS};
+
 }
 
 #endif

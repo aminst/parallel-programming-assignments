@@ -33,7 +33,7 @@ all: P2
 P2: P2.o 
 	$(CC) $(CST11) P2.o $(INCDIR) $(LIBDIR) $(FLAGS) -o P2
 
-P2.o: P2.cpp
+P2.o: P2.cpp utility.hpp
 	$(CC) $(CST11) $(CFLAGS) $(INCDIR) P2.cpp
 
 clean:

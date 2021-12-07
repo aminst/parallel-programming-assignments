@@ -33,7 +33,7 @@ all: P1
 P1: P1.o 
 	$(CC) $(CST11) P1.o $(INCDIR) $(LIBDIR) $(FLAGS) -o P1
 
-P1.o: P1.cpp
+P1.o: P1.cpp utility.hpp
 	$(CC) $(CST11) $(CFLAGS) $(INCDIR) P1.cpp
 
 clean:
